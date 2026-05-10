@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useStore } from "@/core/state/store";
 import { dataBus } from "@/core/data/DataBus";
 import { pluginManager } from "@/core/plugins/PluginManager";
-import { Globe,Key } from "lucide-react";
+import { Globe, Key, Sun, Moon } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { isDemo, DEMO_ADMIN_ROLE } from "@/core/edition";
 
@@ -30,6 +30,8 @@ export function Header() {
     const isMobile = useIsMobile();
     const timeWindow = useStore((s) => s.timeWindow);
     const setTimeWindow = useStore((s) => s.setTimeWindow);
+    const theme = useStore((s) => s.theme);
+    const toggleTheme = useStore((s) => s.toggleTheme);
 
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [isDemoAdmin, setIsDemoAdmin] = useState(false);
@@ -80,8 +82,22 @@ export function Header() {
                     <SearchBar />
                 </div>
 
-                <div className="header__actions">
-                
+                <div className="header__actions" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                    <button
+                        className="btn btn--glow"
+                        onClick={toggleTheme}
+                        title={theme === "dark" ? "Light Mode" : "Dark Mode"}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "6px",
+                            background: "transparent",
+                            border: "none",
+                            color: "var(--text-secondary)"
+                        }}
+                    >
+                        {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+                    </button>
                     <div className="status-badge">
                         <span className="status-badge__dot" />
                         LIVE
@@ -140,6 +156,18 @@ export function Header() {
                         }}
                     >
                         <Key size={14} />
+                    </button>
+                    <button
+                        className="btn btn--glow"
+                        onClick={toggleTheme}
+                        title={theme === "dark" ? "Light Mode" : "Dark Mode"}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "6px",
+                        }}
+                    >
+                        {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
                     </button>
                     <div style={{ width: 1, height: 20, background: "var(--border-subtle)", flexShrink: 0 }} />
                     <div style={{ position: "relative", flexShrink: 0 }} ref={timeRef}>

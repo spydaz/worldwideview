@@ -15,6 +15,7 @@ export interface FloatingStream {
 }
 
 export interface UISlice {
+    theme: "dark" | "light";
     leftSidebarOpen: boolean;
     rightSidebarOpen: boolean;
     configPanelOpen: boolean;
@@ -28,6 +29,8 @@ export interface UISlice {
     highlightLayerId: string | null;
     openMobilePanel: "left" | "right" | null;
     mobileRightPanelGlow: boolean;
+    toggleTheme: () => void;
+    setTheme: (theme: "dark" | "light") => void;
     toggleLeftSidebar: () => void;
     toggleRightSidebar: () => void;
     toggleConfigPanel: () => void;
@@ -50,6 +53,7 @@ export interface UISlice {
 }
 
 export const createUISlice: StateCreator<AppStore, [], [], UISlice> = (set) => ({
+    theme: "dark",
     leftSidebarOpen: true,
     rightSidebarOpen: false,
     configPanelOpen: true,
@@ -64,6 +68,18 @@ export const createUISlice: StateCreator<AppStore, [], [], UISlice> = (set) => (
     openMobilePanel: null,
     mobileRightPanelGlow: false,
     feedbackDialogOpen: false,
+    toggleTheme: () => set((state) => {
+        const newTheme = state.theme === "dark" ? "light" : "dark";
+        // Optionally save to localStorage here if not using middleware, but we'll do it in a useEffect or middleware ideally
+        try { localStorage.setItem("wwv-theme", newTheme); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', newTheme);
+        return { theme: newTheme };
+    }),
+    setTheme: (theme) => set(() => {
+        try { localStorage.setItem("wwv-theme", theme); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme);
+        return { theme };
+    }),
     toggleLeftSidebar: () =>
         set((state) => ({ leftSidebarOpen: !state.leftSidebarOpen })),
     toggleRightSidebar: () =>
