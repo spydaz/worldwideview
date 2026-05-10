@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@spz-loader/core': 0.3.0
+
 importers:
 
   .:
@@ -1500,8 +1503,8 @@ packages:
     peerDependencies:
       webpack: '>=5.0.0'
 
-  '@spz-loader/core@0.3.1':
-    resolution: {integrity: sha512-8qJ1WIBXaJu8HjnJAjYniE0kYcr0kCe5Hp7kDzYiGVvvd7zyrOBwbF5imoW5mvwx1Qba0hxGEK5R9jEoaHKJFA==}
+  '@spz-loader/core@0.3.0':
+    resolution: {integrity: sha512-sbStwMHb/MIE29st7rRuMYWqhX1UmLSFzdpyGtUZUXLkFNIuYKblzjQdtiet8bau8sUf21uL1DQ451zuySGmcA==}
     engines: {node: '>=16', pnpm: '>=8'}
 
   '@standard-schema/spec@1.1.0':
@@ -3947,7 +3950,7 @@ snapshots:
   '@cesium/engine@25.0.0':
     dependencies:
       '@cesium/wasm-splats': 0.1.0-alpha.2
-      '@spz-loader/core': 0.3.1
+      '@spz-loader/core': 0.3.0
       '@tweenjs/tween.js': 25.0.0
       '@zip.js/zip.js': 2.8.26
       autolinker: 4.1.5
@@ -5039,7 +5042,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@spz-loader/core@0.3.1': {}
+  '@spz-loader/core@0.3.0': {}
 
   '@standard-schema/spec@1.1.0': {}
 

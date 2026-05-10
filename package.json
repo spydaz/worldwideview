@@ -1,6 +1,6 @@
 {
   "name": "worldwideview",
-  "version": "2.1.12",
+  "version": "2.2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@9.15.4",
@@ -72,6 +72,9 @@
     "vitest": "^4.1.5"
   },
   "pnpm": {
+    "overrides": {
+      "@spz-loader/core": "0.3.0"
+    },
     "onlyBuiltDependencies": [
       "@prisma/engines",
       "@sentry/cli",
