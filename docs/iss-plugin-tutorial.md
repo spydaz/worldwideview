@@ -253,10 +253,10 @@ Open `c:\dev\worldwideview\local-plugins\wwv-plugin-iss\package.json`. You must 
 
 ### 6.2 Publish to NPM
 
-In your plugin terminal, log in to NPM and publish your package:
+In your plugin terminal, log in to NPM and publish your package using the WWV CLI:
 ```bash
 npm login
-npm publish --access public
+node ../../packages/wwv-cli/dist/index.js publish
 ```
 
 ### 6.3 Submit to the Marketplace
