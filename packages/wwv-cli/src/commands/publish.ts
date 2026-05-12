@@ -29,7 +29,7 @@ export const publishCommand = new Command('publish')
       execSync('npm publish --access public', { stdio: 'inherit', cwd });
       
       console.log('[wwv-cli] Successfully published to NPM!');
-      console.log('[wwv-cli] To submit this plugin to the WorldWideView Marketplace, please ask an Admin to add your package name in the Admin UI.');
+      console.log('[wwv-cli] To submit this plugin to the WorldWideView Marketplace, please visit: https://marketplace.worldwideview.dev/submit');
       console.log(`[wwv-cli] Package Name: ${pkgContent.name}`);
 
     } catch (err: any) {
