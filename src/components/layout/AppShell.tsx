@@ -93,7 +93,12 @@ export function AppShell() {
 
             for (const plugin of pluginRegistry.getAll()) {
                 await pluginManager.registerPlugin(plugin);
-                const shouldEnable = demoDefaultPlugins.has(plugin.id);
+                let shouldEnable = false;
+                if (isDemo) {
+                    shouldEnable = demoDefaultPlugins.has(plugin.id);
+                } else {
+                    shouldEnable = !disabledIds.has(plugin.id);
+                }
                 initLayer(plugin.id, shouldEnable);
                 if (shouldEnable) {
                     await pluginManager.enablePlugin(plugin.id);
