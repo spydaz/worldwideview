@@ -136,6 +136,8 @@ export function AppShell() {
             trackEvent("platform-boot", { duration });
         }
     }, [boot.phase]);
+    const timelineOpen = useStore((s) => s.timelineOpen);
+
     const rootClasses = [
         "app-shell",
         isBooting && boot.headerReady ? "boot-header" : "",
@@ -143,6 +145,7 @@ export function AppShell() {
         isBooting && boot.timelineReady ? "boot-timeline" : "",
         isBooting && boot.controlsReady ? "boot-controls" : "",
         !isBooting ? "boot-done" : "",
+        !timelineOpen ? "timeline-closed" : "",
     ].filter(Boolean).join(" ");
 
     return (
