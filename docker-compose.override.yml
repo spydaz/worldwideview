@@ -12,10 +12,14 @@ services:
         - NEXT_PUBLIC_CESIUM_ION_TOKEN=${NEXT_PUBLIC_CESIUM_ION_TOKEN:-}
         - NEXT_PUBLIC_ADSENSE_CLIENT_ID=${NEXT_PUBLIC_ADSENSE_CLIENT_ID:-}
     pull_policy: build
+    ports:
+      - "3000:3000"
 
   db:
     profiles:
       - "${WWV_SKIP_LOCAL_DB:-}"
+    ports:
+      - "5432:5432"
 
   wwv-data-engine:
     command: >
@@ -24,6 +28,8 @@ services:
       cd $$SEEDERS_DIR/community && CI=true pnpm install --ignore-scripts && pnpm -r rebuild better-sqlite3 esbuild &&
       if [ -d \"$$SEEDERS_DIR/private\" ]; then cd $$SEEDERS_DIR/private && CI=true pnpm install --ignore-scripts && pnpm -r rebuild better-sqlite3 esbuild; fi &&
       cd /app && node dist/server.js"
+    ports:
+      - "5000:5000"
 
 networks:
   coolify:
