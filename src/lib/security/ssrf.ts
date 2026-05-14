@@ -34,7 +34,7 @@ export async function safeFetch(urlStr: string, options: FetchOptions = {}): Pro
     }
 
     let resolvedIp: string;
-    let resolvedFamily: 4 | 6;
+    let resolvedFamily: number;
     try {
         const lookupResult = await dns.lookup(url.hostname);
         resolvedIp = lookupResult.address;
@@ -62,12 +62,13 @@ export async function safeFetch(urlStr: string, options: FetchOptions = {}): Pro
     const id = setTimeout(() => controller.abort(), timeout);
     
     try {
-        const response = await fetch(urlStr, {
+        const fetchOptions: any = {
             ...options,
             dispatcher: customAgent,
             redirect: "manual",
-            signal: controller.signal as any
-        });
+            signal: controller.signal
+        };
+        const response = await fetch(urlStr, fetchOptions);
         
         if (response.body) {
             let totalSize = 0;
