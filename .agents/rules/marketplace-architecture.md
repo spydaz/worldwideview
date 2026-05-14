@@ -39,40 +39,37 @@ Plugins from the marketplace use the `bundle` format and are imported at runtime
 
 ---
 
-## One-Click Install Flow (Redirect-Based)
+## Token Exchange Authentication (PKCE)
 
-**No static API keys.** Auth is entirely session-based. The marketplace redirects the browser to WWV, which checks the user's existing login session.
+Auth is governed by an **Asymmetric JWT Token Exchange (PKCE)** model to eliminate static, long-lived, and un-rotatable tokens. The Marketplace acts as the OAuth Authorization Server.
 
 ```
-User clicks "Install" on marketplace
+Local App initiates connection
   ↓
-Marketplace: check localStorage for instance URL
-  ↓ (if not configured)
-Show "Connect Your Instance" modal → user enters http://localhost:3000
+Local App generates PKCE `code_verifier` and `code_challenge` (S256)
   ↓
-MP → GET /api/marketplace/grant-token?redirectTo=...
+Local App redirects to Marketplace: /oauth/authorize?response_type=code&...
   ↓
-WWV: check Auth.js session → issue 30-day JWT → redirect ?token=<jwt>
+User authenticates on Marketplace and grants access
   ↓
-MP stores JWT in localStorage
+Marketplace redirects back to Local App: /api/marketplace/callback?code=...
   ↓
-MP: Navigate browser to /api/marketplace/install-redirect
-  ?pluginId=borders&manifest=<b64>&redirectTo=...
+Local App exchanges `code` + `code_verifier` for a long-lived API Key from Marketplace
   ↓
-WWV: check session → upsertPlugin() → issueMarketplaceToken()
-  ↓
-Redirect back ?installed=borders&token=<jwt>
-  ↓
-MP: Show ✓ Installed — store JWT for future Manage-page calls
+Local App securely stores API Key (encrypted via AES-256-GCM)
 ```
 
-### Token Flow
+### Data Engine Connections
 
-After successful install, WWV issues a **30-day HS256 JWT** (`scope: "marketplace"`, signed with `AUTH_SECRET`). The marketplace stores it in `localStorage` and sends it as `Authorization: Bearer <token>` on all subsequent API calls.
+Once connected, the Local App uses the long-lived API Key to fetch short-lived entitlements for specific data engines:
+1. **Request JWT**: Local App requests a short-lived JWT for a specific Data Engine audience.
+2. **Issue JWT**: Marketplace signs an EdDSA JWT containing the user's entitlements and the specific audience.
+3. **Connect**: Local App connects to the decentralized Data Engine via WebSocket and performs "First-Message Auth" by sending the JWT.
+4. **Verify**: Data Engine verifies the EdDSA signature using the Marketplace's public JWKS. No central DB lookup is required.
 
 `validateMarketplaceAuth` accepts auth in priority order:
 1. Active Auth.js session (same-origin browser)
-2. Marketplace JWT Bearer token (cross-origin Manage page)
+2. EdDSA JWT Bearer token (cross-origin, audience-bound)
 3. Legacy static `WWV_BRIDGE_TOKEN` (backward compat)
 
 ---
